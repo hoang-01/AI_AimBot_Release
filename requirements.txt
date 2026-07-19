@@ -1,0 +1,9 @@
+onnxruntime-gpu
+opencv-python
+numpy
+dxcam
+hidapi
+customtkinter
+Pillow
+torch
+--extra-index-url https://download.pytorch.org/whl/cu118

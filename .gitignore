@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+*.pyc
+
+# Virtual Environments
+venv/
+venv_train/
+.venv/
+env/
+ENV/
+
+# Model Caches & Large Models
+trt_cache/
+*.pt
+*.onnx
+
+# IDEs
+.idea/
+.vscode/
+
+# Config local overrides
+config/settings.json
