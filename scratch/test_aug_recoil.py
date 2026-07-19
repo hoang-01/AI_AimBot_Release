@@ -175,7 +175,7 @@ def main():
                         sleep_time = sub_delay_ms - elapsed
                         if sleep_time > 0.1:
                             time.sleep(sleep_time / 1000.0)
-                    
+                            
                     if interrupted:
                         break
                         
@@ -183,10 +183,6 @@ def main():
                     print("[INFO] Đã ngắt sấy ngay lập tức do nhả chuột.")
                 else:
                     print("[DONE] Sấy xong toàn bộ 40 viên.")
-                
-                # Chờ người dùng nhả chuột ra hoàn toàn trước khi cho phép sấy tiếp
-                while is_shooting():
-                    time.sleep(0.01)
             
             time.sleep(0.01)
             
