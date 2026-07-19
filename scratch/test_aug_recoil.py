@@ -125,36 +125,68 @@ def main():
     VK_LBUTTON = 0x01  # Chuột TRÁI
     VK_RBUTTON = 0x02  # Chuột PHẢI
     
+    def is_shooting():
+        left = (get_async_key_state(VK_LBUTTON) & 0x8000) != 0
+        right = (get_async_key_state(VK_RBUTTON) & 0x8000) != 0
+        return left and right
+
     print("\n[READY] Nhấn giữ đồng thời CHUỘT TRÁI + CHUỘT PHẢI trong game để chạy thử một loạt sấy (40 viên) của AUG.")
     print("Nhấn Ctrl + C để thoát script test.")
 
     try:
         while True:
-            # Nếu giữ đồng thời cả Chuột Trái và Chuột Phải
-            left_click = (get_async_key_state(VK_LBUTTON) & 0x8000) != 0
-            right_click = (get_async_key_state(VK_RBUTTON) & 0x8000) != 0
-            
-            if left_click and right_click:
+            if is_shooting():
                 print("\n[RUNNING] Đang thực hiện sấy thử AUG...")
+                
+                # Bộ tích lũy sai số float để chia nhỏ chuyển động
+                ry = 0.0
+                interrupted = False
                 
                 # Duyệt qua từng viên trong mảng
                 for shot_idx, dy in enumerate(scaled_pattern):
-                    t_shot_start = time.perf_counter()
-                    
-                    if dy > 0:
-                        # Kéo chuột đi xuống (Y = dy, X = 0)
-                        mouse.move(0, dy)
-                    
-                    # Tính toán thời gian nghỉ giữa các viên
-                    elapsed = (time.perf_counter() - t_shot_start) * 1000.0
-                    sleep_time_ms = FIRE_RATE_MS - elapsed
-                    if sleep_time_ms > 0:
-                        time.sleep(sleep_time_ms / 1000.0)
+                    # Kiểm tra ngắt trước khi nạp viên mới
+                    if not is_shooting():
+                        interrupted = True
+                        break
                         
-                print("[DONE] Sấy xong 40 viên. Thả chuột ra và nhấn lại để sấy tiếp.")
-                # Chờ cho đến khi người dùng nhả chuột để tránh sấy liên tục không kiểm soát
-                while (get_async_key_state(VK_LBUTTON) & 0x8000) != 0 or (get_async_key_state(VK_RBUTTON) & 0x8000) != 0:
-                    time.sleep(0.05)
+                    # Băm nhỏ phát bắn thành 5 bước phụ để tăng độ mượt ghì chuột
+                    SUB_STEPS = 5
+                    sub_delay_ms = FIRE_RATE_MS / SUB_STEPS  # 84 / 5 = 16.8 ms
+                    step_dy = dy / float(SUB_STEPS)
+                    
+                    for step in range(SUB_STEPS):
+                        t_step_start = time.perf_counter()
+                        
+                        # Kiểm tra ngắt ngay trong từng bước phụ (phản hồi trễ tối đa chỉ 16ms)
+                        if not is_shooting():
+                            interrupted = True
+                            break
+                        
+                        # Tích lũy dịch chuyển chuột dọc
+                        ry += step_dy
+                        my = int(ry)
+                        
+                        if my > 0:
+                            mouse.move(0, my)
+                            ry -= my  # Khấu trừ phần chẵn đã dịch chuyển
+                            
+                        # Sleep bù trừ thời gian thực thi của bước phụ
+                        elapsed = (time.perf_counter() - t_step_start) * 1000.0
+                        sleep_time = sub_delay_ms - elapsed
+                        if sleep_time > 0.1:
+                            time.sleep(sleep_time / 1000.0)
+                    
+                    if interrupted:
+                        break
+                        
+                if interrupted:
+                    print("[INFO] Đã ngắt sấy ngay lập tức do nhả chuột.")
+                else:
+                    print("[DONE] Sấy xong toàn bộ 40 viên.")
+                
+                # Chờ người dùng nhả chuột ra hoàn toàn trước khi cho phép sấy tiếp
+                while is_shooting():
+                    time.sleep(0.01)
             
             time.sleep(0.01)
             
