@@ -107,36 +107,41 @@ def main():
         print("[ERR] Chuot chua san sang. Ket thuc.")
         return
 
-    # Cu phap WinAPI kiem tra phim F4
+    # Cú pháp WinAPI kiểm tra trạng thái phím chuột
     get_async_key_state = ctypes.windll.user32.GetAsyncKeyState
-    KEY_F4 = 0x73  # Phim F4 de chay test
+    VK_LBUTTON = 0x01  # Chuột TRÁI
+    VK_RBUTTON = 0x02  # Chuột PHẢI
     
-    print("\n[READY] Nhan F4 trong game de chay thu mot loat say say (40 vien) cua AUG.")
-    print("Nhan Ctrl + C de thoat script test.")
+    print("\n[READY] Nhấn giữ đồng thời CHUỘT TRÁI + CHUỘT PHẢI trong game để chạy thử một loạt sấy (40 viên) của AUG.")
+    print("Nhấn Ctrl + C để thoát script test.")
 
     try:
         while True:
-            # Neu phim F4 duoc nhan xuong
-            if (get_async_key_state(KEY_F4) & 0x8000) != 0:
-                print("\n[RUNNING] Dang thuc hien say thu AUG...")
+            # Nếu giữ đồng thời cả Chuột Trái và Chuột Phải
+            left_click = (get_async_key_state(VK_LBUTTON) & 0x8000) != 0
+            right_click = (get_async_key_state(VK_RBUTTON) & 0x8000) != 0
+            
+            if left_click and right_click:
+                print("\n[RUNNING] Đang thực hiện sấy thử AUG...")
                 
-                # Duyet qua tung vien trong mang
+                # Duyệt qua từng viên trong mảng
                 for shot_idx, dy in enumerate(scaled_pattern):
                     t_shot_start = time.perf_counter()
                     
                     if dy > 0:
                         # Kéo chuột đi xuống (Y = dy, X = 0)
-                        # Luu y: dy trong file patterm.json la so nguyen duong tuong ung keo chuot xuong duoi
                         mouse.move(0, dy)
                     
-                    # Tinh toan thoi gian nghi giua cac vien de khong lam lech chu ky sấy
+                    # Tính toán thời gian nghỉ giữa các viên
                     elapsed = (time.perf_counter() - t_shot_start) * 1000.0
                     sleep_time_ms = FIRE_RATE_MS - elapsed
                     if sleep_time_ms > 0:
                         time.sleep(sleep_time_ms / 1000.0)
                         
-                print("[DONE] Say xong 40 vien. Cho phim F4 tiep theo.")
-                time.sleep(0.5)  # Tranh trigger lap lai khi bam phim
+                print("[DONE] Sấy xong 40 viên. Thả chuột ra và nhấn lại để sấy tiếp.")
+                # Chờ cho đến khi người dùng nhả chuột để tránh sấy liên tục không kiểm soát
+                while (get_async_key_state(VK_LBUTTON) & 0x8000) != 0 or (get_async_key_state(VK_RBUTTON) & 0x8000) != 0:
+                    time.sleep(0.05)
             
             time.sleep(0.01)
             
