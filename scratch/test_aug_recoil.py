@@ -25,11 +25,21 @@ VERTICAL_RECOIL_BASE = 1.50         # Vertical Recoil cơ bản của AUG
 FIRST_SHOT_MULTIPLIER = 1.50        # Hệ số giật viên đầu tiên (1.50)
 TOTAL_CLIMB_PX = 729                # Tổng độ cao leo (729 px)
 
+# Hệ số bù trừ độ nhạy ngắm trong game (Tăng lên nếu ghì chưa đủ, giảm đi nếu ghì quá đà xuống đất)
+# Mặc định thiết lập 1.35 để bù cho độ nhạy chuột và visual shake
+SENSITIVITY_MULTIPLIER = 1.35
+
 # Hệ số nhân phụ kiện
 MULTIPLIER_DOWN = 0.52              # Nằm bắn (down)
 MULTIPLIER_THUMB = 0.85             # Tay cầm thumb (thumb)
 MULTIPLIER_NO_SCOPE = 1.0           # Ống ngắm (no_scope)
 MULTIPLIER_COMPENSATE = 0.784       # Đầu nòng compensator
+
+# Thiết lập độ chính xác thời gian tối đa trên Windows (1ms)
+try:
+    ctypes.windll.winmm.timeBeginPeriod(1)
+except Exception:
+    pass
 
 # Tính toán tổng hệ số phụ kiện
 total_attachment_multiplier = (
@@ -39,11 +49,11 @@ total_attachment_multiplier = (
     MULTIPLIER_COMPENSATE
 )
 
-# Tính toán mảng độ giật thực tế sau khi áp dụng hệ số nhân chuẩn hóa
+# Tính toán mảng độ giật thực tế sau khi áp dụng hệ số nhân chuẩn hóa và bù nhạy
 scaled_pattern = []
 for shot_idx, dy in enumerate(AUG_BASE_PATTERN):
-    # Lực dọc cơ bản nhân với hệ số Vertical Recoil (1.50) và tổng hệ số phụ kiện
-    dy_scaled = dy * (VERTICAL_RECOIL_BASE / 1.33) * total_attachment_multiplier
+    # Lực dọc cơ bản nhân với hệ số Vertical Recoil, hệ số phụ kiện và hệ số bù độ nhạy
+    dy_scaled = dy * (VERTICAL_RECOIL_BASE / 1.33) * total_attachment_multiplier * SENSITIVITY_MULTIPLIER
     
     # Phát bắn thứ 2 (viên nảy đầu tiên thực tế từ phát 1 sang 2) áp dụng First Shot Multiplier (1.50)
     if shot_idx == 1:
@@ -170,11 +180,17 @@ def main():
                             mouse.move(0, my)
                             ry -= my  # Khấu trừ phần chẵn đã dịch chuyển
                             
-                        # Sleep bù trừ thời gian thực thi của bước phụ
-                        elapsed = (time.perf_counter() - t_step_start) * 1000.0
-                        sleep_time = sub_delay_ms - elapsed
-                        if sleep_time > 0.1:
-                            time.sleep(sleep_time / 1000.0)
+                        # Vòng lặp ngủ độ chính xác cao (Spin-wait loop) để đảm bảo thời gian bước chính xác tuyệt đối
+                        target_time = t_step_start + (sub_delay_ms / 1000.0)
+                        
+                        # Cho phép ngủ ngắn nếu thời gian chờ còn dài (>2ms) để giảm tải CPU
+                        rem = target_time - time.perf_counter()
+                        if rem > 0.002:
+                            time.sleep(rem - 0.001)
+                            
+                        # Vòng lặp bận rỗng cực ngắn để căn chính xác mili-giây cuối
+                        while time.perf_counter() < target_time:
+                            pass
                             
                     if interrupted:
                         break
