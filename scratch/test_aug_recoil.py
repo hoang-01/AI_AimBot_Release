@@ -13,21 +13,21 @@ OBFUSCATION_KEY = 0xAB
 # Khai báo thông số AUG chuẩn hóa mới
 # Mảng mẫu cơ sở (mẫu cơ bản của AUG)
 AUG_BASE_PATTERN = [
-    26, 45, 25, 25, 32, 36, 36, 36, 45, 45, 
+    28, 45, 29, 30, 32, 36, 36, 36, 45, 45, 
     52, 52, 52, 52, 52, 56, 56, 56, 56, 56, 
-    58, 58, 58, 58, 56, 56, 56, 56, 56, 56, 
-    57, 57, 57, 57, 57, 60, 60, 60, 58, 58
+    56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 
+    57, 57, 57, 57, 57, 56, 56, 56, 56, 56
 ]
 FIRE_RATE_MS = 84  # Tốc độ bắn của AUG (khoảng thời gian trễ ms giữa các phát)
 
-# Các thông số vật lý thực tế từ cấu hình
-VERTICAL_RECOIL_BASE = 1.50         # Vertical Recoil cơ bản của AUG
+# Các thông số vật lý thực tế từ cấu hình mới của bạn
+VERTICAL_RECOIL_BASE = 1.40         # Vertical Recoil cơ bản mới của AUG (1.40)
 FIRST_SHOT_MULTIPLIER = 1.50        # Hệ số giật viên đầu tiên (1.50)
-TOTAL_CLIMB_PX = 729                # Tổng độ cao leo (729 px)
+TOTAL_CLIMB_PX = 680                # Tổng độ cao leo mới (680 px)
 
 # Hệ số bù trừ độ nhạy ngắm trong game (Tăng lên nếu ghì chưa đủ, giảm đi nếu ghì quá đà xuống đất)
-# Mặc định thiết lập 1.35 để bù cho độ nhạy chuột và visual shake
-SENSITIVITY_MULTIPLIER = 1.35
+# Mặc định thiết lập 1.20 để phù hợp với độ nhạy chuột của bạn
+SENSITIVITY_MULTIPLIER = 1.20
 
 # Hệ số nhân phụ kiện
 MULTIPLIER_DOWN = 0.52              # Nằm bắn (down)
