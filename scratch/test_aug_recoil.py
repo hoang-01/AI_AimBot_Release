@@ -10,7 +10,8 @@ PID = 0xC563
 SECRET_KEY = "MASH_KEY_HARDWARE_LOCKED_2026"
 OBFUSCATION_KEY = 0xAB
 
-# Khai báo thông số AUG của bạn
+# Khai báo thông số AUG chuẩn hóa mới
+# Mảng mẫu cơ sở (mẫu cơ bản của AUG)
 AUG_BASE_PATTERN = [
     26, 45, 25, 25, 32, 36, 36, 36, 45, 45, 
     52, 52, 52, 52, 52, 56, 56, 56, 56, 56, 
@@ -19,25 +20,36 @@ AUG_BASE_PATTERN = [
 ]
 FIRE_RATE_MS = 84  # Tốc độ bắn của AUG (khoảng thời gian trễ ms giữa các phát)
 
+# Các thông số vật lý thực tế từ cấu hình
+VERTICAL_RECOIL_BASE = 1.50         # Vertical Recoil cơ bản của AUG
+FIRST_SHOT_MULTIPLIER = 1.50        # Hệ số giật viên đầu tiên (1.50)
+TOTAL_CLIMB_PX = 729                # Tổng độ cao leo (729 px)
+
 # Hệ số nhân phụ kiện
-MULTIPLIER_HOLD = 1.33
 MULTIPLIER_DOWN = 0.52              # Nằm bắn (down)
 MULTIPLIER_THUMB = 0.85             # Tay cầm thumb (thumb)
 MULTIPLIER_NO_SCOPE = 1.0           # Ống ngắm (no_scope)
 MULTIPLIER_COMPENSATE = 0.784       # Đầu nòng compensator
 
-# Tính toán tổng hệ số nhân dọc (Vertical Multiplier)
-total_vertical_multiplier = (
-    MULTIPLIER_HOLD * 
+# Tính toán tổng hệ số phụ kiện
+total_attachment_multiplier = (
     MULTIPLIER_DOWN * 
     MULTIPLIER_THUMB * 
     MULTIPLIER_NO_SCOPE * 
     MULTIPLIER_COMPENSATE
 )
 
-# Tính toán mảng độ giật thực tế sau khi áp dụng hệ số nhân
-# Công thức: dy_thực_tế = dy_gốc * total_vertical_multiplier
-scaled_pattern = [int(dy * total_vertical_multiplier) for dy in AUG_BASE_PATTERN]
+# Tính toán mảng độ giật thực tế sau khi áp dụng hệ số nhân chuẩn hóa
+scaled_pattern = []
+for shot_idx, dy in enumerate(AUG_BASE_PATTERN):
+    # Lực dọc cơ bản nhân với hệ số Vertical Recoil (1.50) và tổng hệ số phụ kiện
+    dy_scaled = dy * (VERTICAL_RECOIL_BASE / 1.33) * total_attachment_multiplier
+    
+    # Phát bắn thứ 2 (viên nảy đầu tiên thực tế từ phát 1 sang 2) áp dụng First Shot Multiplier (1.50)
+    if shot_idx == 1:
+        dy_scaled *= FIRST_SHOT_MULTIPLIER
+        
+    scaled_pattern.append(max(1, int(dy_scaled)))
 
 class TestCH552Mouse:
     def __init__(self):
@@ -89,12 +101,13 @@ def main():
     print("=" * 60)
     print("               TEST NO-RECOIL AUG CH552 DONGLE")
     print("=" * 60)
-    print(f"1. He so Hold:        {MULTIPLIER_HOLD}")
-    print(f"2. Tu the (Down):     {MULTIPLIER_DOWN}")
-    print(f"3. Tay cam (Thumb):   {MULTIPLIER_THUMB}")
-    print(f"4. Ong ngam (1x):     {MULTIPLIER_NO_SCOPE}")
-    print(f"5. Dau nong (Comp):   {MULTIPLIER_COMPENSATE}")
-    print(f"--> Tong he so nhan:  {total_vertical_multiplier:.6f}\n")
+    print(f"1. Vert Recoil Base:  {VERTICAL_RECOIL_BASE}")
+    print(f"2. First Shot Mult:   {FIRST_SHOT_MULTIPLIER}")
+    print(f"3. Tu the (Down):     {MULTIPLIER_DOWN}")
+    print(f"4. Tay cam (Thumb):   {MULTIPLIER_THUMB}")
+    print(f"5. Ong ngam (1x):     {MULTIPLIER_NO_SCOPE}")
+    print(f"6. Dau nong (Comp):   {MULTIPLIER_COMPENSATE}")
+    print(f"--> Tong he so phu kien: {total_attachment_multiplier:.6f}\n")
     
     print("Mảng độ giật gốc:")
     print(AUG_BASE_PATTERN)
