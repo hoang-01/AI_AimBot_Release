@@ -57,9 +57,9 @@ AUG_BASE_PATTERN = [
 FIRE_RATE_MS = 84  # Tốc độ bắn của AUG (khoảng thời gian trễ ms giữa các phát)
 
 # Các thông số vật lý thực tế từ cấu hình mới của bạn
-VERTICAL_RECOIL_BASE = 1.40         # Vertical Recoil cơ bản mới của AUG (1.40)
+VERTICAL_RECOIL_BASE = 1.50         # Vertical Recoil cơ bản mới của AUG (1.50)
 FIRST_SHOT_MULTIPLIER = 1.50        # Hệ số giật viên đầu tiên (1.50)
-TOTAL_CLIMB_PX = 680                # Tổng độ cao leo mới (680 px)
+TOTAL_CLIMB_PX = 729                # Tổng độ cao leo mới (729 px)
 
 # Hệ số bù trừ độ nhạy ngắm trong game (Tăng lên nếu ghì chưa đủ, giảm đi nếu ghì quá đà xuống đất)
 # Mặc định thiết lập 1.20 để phù hợp với độ nhạy chuột của bạn
