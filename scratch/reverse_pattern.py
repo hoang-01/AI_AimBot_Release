@@ -4,10 +4,10 @@
 # 1. Nhap mang dan da test chuan trong game cua ban tai day
 # Day la luc keo chuot thuc te (mickeys) ma ban thay sấy chuẩn nhat
 WORKING_PATTERN = [
-    45, 44, 30, 30, 30, 48, 45, 45, 43, 45, 
-    48, 45, 45, 45, 48, 45, 43, 45, 45, 48,
-    45, 48, 45, 48, 45, 48, 45, 48, 45, 48,
-    45, 48, 45, 48, 45, 48, 45, 48, 45, 48
+    28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 
+    39, 40, 41, 42, 43, 44, 45, 45, 45, 45, 
+    45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 
+    45, 45, 45, 45, 45, 45, 45, 45, 45, 45
 ]
 
 # 2. Cau hinh phu kien ban da dung khi test trong game
