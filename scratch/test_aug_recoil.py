@@ -32,9 +32,9 @@ SENSITIVITY_MULTIPLIER = 1
 
 # Hệ số nhân phụ kiện
 MULTIPLIER_DOWN = 0.80              # Ngồi bắn (squat = 0.80)
-MULTIPLIER_THUMB = 0.85            # Tay cầm thumb (thumb)
+MULTIPLIER_THUMB = 0.85           # Tay cầm thumb (thumb)
 MULTIPLIER_NO_SCOPE = 1.0           # Ống ngắm (no_scope = 1.0)
-MULTIPLIER_COMPENSATE = 0.85      # Đầu nòng compensator
+MULTIPLIER_COMPENSATE = 0.85             # Đầu nòng compensator
 
 # Thiết lập độ chính xác thời gian tối đa trên Windows (1ms)
 try:
@@ -66,6 +66,7 @@ class TestCH552Mouse:
     def __init__(self):
         self.device = None
         self.connected = False
+        self.use_win32_fallback = False
         self.connect()
 
     def connect(self):
@@ -84,16 +85,25 @@ class TestCH552Mouse:
                 prod_str = self.device.get_product_string()
                 if prod_str == SECRET_KEY:
                     self.connected = True
-                    print(f"[OK] Da ket noi va xac thuc dongle CH552.")
+                    print(f"[OK] Da ket noi va xac thuc dongle CH552 phan cung.")
                 else:
-                    print("[ERR] Khoa phan cung khong khop!")
-                    sys.exit(1)
+                    print("[WARN] Khoa phan cung khong khop! Tu dong chuyen sang gia lap Win32.")
+                    self.use_win32_fallback = True
             else:
-                print("[ERR] Khong tim thay thiet bi CH552 Raw HID.")
+                print("[WARN] Khong tim thay dongle CH552. Tu dong chuyen sang gia lap Win32.")
+                self.use_win32_fallback = True
         except Exception as e:
-            print(f"[ERR] Loi ket noi hid: {e}")
+            print(f"[WARN] Loi ket noi hid ({e}). Tu dong chuyen sang gia lap Win32.")
+            self.use_win32_fallback = True
 
     def move(self, x, y):
+        # 1. Neu su dung gia lap Windows (khong co phan cung)
+        if self.use_win32_fallback:
+            # MOUSEEVENTF_MOVE = 0x0001
+            ctypes.windll.user32.mouse_event(0x0001, int(x), int(y), 0, 0)
+            return
+
+        # 2. Neu co thiet bi phan cung CH552
         if not self.connected or not self.device:
             return
         try:
@@ -107,6 +117,8 @@ class TestCH552Mouse:
         except Exception as e:
             print(f"[ERR] Loi ghi command: {e}")
             self.connected = False
+            self.use_win32_fallback = True
+            print("[WARN] Thiet bi loi dot ngot, chuyen sang gia lap Win32.")
 
 def main():
     print("=" * 60)
@@ -127,9 +139,10 @@ def main():
     print("-" * 60)
 
     mouse = TestCH552Mouse()
-    if not mouse.connected:
-        print("[ERR] Chuot chua san sang. Ket thuc.")
-        return
+    if mouse.use_win32_fallback:
+        print("[INFO] Che do gia lap chuot Win32 API (Khong can phan cung Dongle) dang hoat dong.")
+    else:
+        print("[INFO] Che do ghi chuot truc tiep qua phan cung CH552 Dongle dang hoat dong.")
 
     # Cú pháp WinAPI kiểm tra trạng thái phím chuột
     get_async_key_state = ctypes.windll.user32.GetAsyncKeyState
