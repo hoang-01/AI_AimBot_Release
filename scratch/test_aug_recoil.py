@@ -12,22 +12,23 @@ OBFUSCATION_KEY = 0xAB
 
 # Khai báo thông số AUG chuẩn hóa mới
 # Mảng mẫu cơ sở (mẫu cơ bản của AUG)
+# Mảng mẫu cơ sở (mẫu cơ bản của AUG đo trực tiếp từ biểu đồ súng trần)
+# Giá trị gốc đã bao gồm lực giật mạnh viên đầu ở phần tử đầu tiên (47 so với trung bình 32-36)
 AUG_BASE_PATTERN = [
-    24, 38, 24, 25, 27, 30, 30, 30, 38, 38, 
-    44, 44, 44, 44, 44, 47, 47, 47, 47, 47, 
-    47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 
-    48, 48, 48, 48, 48, 47, 47, 47, 47, 47
+    47, 32, 30, 32, 34, 36, 34, 34, 32, 34, 
+    36, 34, 34, 34, 36, 34, 32, 34, 34, 36,
+    34, 36, 34, 36, 34, 36, 34, 36, 34, 36,
+    34, 36, 34, 36, 34, 36, 34, 36, 34, 36
 ]
 FIRE_RATE_MS = 84  # Tốc độ bắn của AUG (khoảng thời gian trễ ms giữa các phát)
 
 # Các thông số vật lý thực tế từ cấu hình mới của bạn
 VERTICAL_RECOIL_BASE = 1.40         # Vertical Recoil cơ bản mới của AUG (1.40)
-FIRST_SHOT_MULTIPLIER = 1.50        # Hệ số giật viên đầu tiên (1.50)
+FIRST_SHOT_MULTIPLIER = 1.00        # Đặt là 1.0 vì lực giật viên đầu đã được nạp sẵn vào mảng thô phía trên
 TOTAL_CLIMB_PX = 680                # Tổng độ cao leo mới (680 px)
 
-# Hệ số bù trừ độ nhạy ngắm trong game (Tăng lên nếu ghì chưa đủ, giảm đi nếu ghì quá đà xuống đất)
-# Mặc định thiết lập 1.20 để phù hợp với độ nhạy chuột của bạn
-SENSITIVITY_MULTIPLIER = 1.20
+# Hệ số bù trừ độ nhạy ngắm trong game
+SENSITIVITY_MULTIPLIER = 1.225
 
 # Hệ số nhân phụ kiện
 MULTIPLIER_DOWN = 0.52              # Nằm bắn (down)
@@ -55,9 +56,8 @@ for shot_idx, dy in enumerate(AUG_BASE_PATTERN):
     # Lực dọc cơ bản nhân với hệ số Vertical Recoil, hệ số phụ kiện và hệ số bù độ nhạy
     dy_scaled = dy * (VERTICAL_RECOIL_BASE / 1.33) * total_attachment_multiplier * SENSITIVITY_MULTIPLIER
     
-    # Phát bắn thứ 2 (viên nảy đầu tiên thực tế từ phát 1 sang 2) áp dụng First Shot Multiplier (1.50)
-    if shot_idx == 1:
-        dy_scaled *= FIRST_SHOT_MULTIPLIER
+    # Nhân thêm hệ số viên đầu (được đặt bằng 1.0 vì đã nạp sẵn vào mảng)
+    dy_scaled *= FIRST_SHOT_MULTIPLIER
         
     scaled_pattern.append(max(1, int(dy_scaled)))
 
