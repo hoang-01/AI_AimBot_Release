@@ -11,18 +11,19 @@ SECRET_KEY = "MASH_KEY_HARDWARE_LOCKED_2026"
 OBFUSCATION_KEY = 0xAB
 
 # Khai báo thông số AUG chuẩn hóa mới
-# Mảng mẫu cơ sở (mẫu cơ bản của AUG)
+# Mảng mẫu cơ sở (mẫu cơ bản của AUG đo trực tiếp từ biểu đồ súng trần mới của bạn)
+# Đã được nhân tỉ lệ scale 25.21 để khớp chính xác với tổng lực leo 729px
 AUG_BASE_PATTERN = [
-    24, 41, 23, 23, 29, 33, 33, 33, 41, 41, 
-    47, 47, 47, 47, 47, 51, 51, 51, 51, 51, 
-    52, 52, 52, 52, 51, 51, 51, 51, 51, 51, 
-    52, 52, 52, 52, 52, 54, 54, 54, 52, 52
+    63, 43, 40, 43, 45, 48, 45, 45, 43, 45, 
+    48, 45, 45, 45, 48, 45, 43, 45, 45, 48,
+    45, 48, 45, 48, 45, 48, 45, 48, 45, 48,
+    45, 48, 45, 48, 45, 48, 45, 48, 45, 48
 ]
 FIRE_RATE_MS = 84  # Tốc độ bắn của AUG (khoảng thời gian trễ ms giữa các phát)
 
 # Các thông số vật lý thực tế từ cấu hình mới của bạn
 VERTICAL_RECOIL_BASE = 1.50         # Vertical Recoil cơ bản mới của AUG (1.50)
-FIRST_SHOT_MULTIPLIER = 1.50        # Hệ số giật viên đầu tiên (1.50)
+FIRST_SHOT_MULTIPLIER = 1.00        # Đặt là 1.0 vì lực giật viên đầu đã được tích hợp sẵn vào mảng thô (63)
 TOTAL_CLIMB_PX = 729                # Tổng độ cao leo mới (729 px)
 
 # Hệ số bù trừ độ nhạy ngắm trong game (Tăng lên nếu ghì chưa đủ, giảm đi nếu ghì quá đà xuống đất)
