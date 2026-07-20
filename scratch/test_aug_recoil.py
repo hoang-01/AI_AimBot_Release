@@ -14,10 +14,10 @@ OBFUSCATION_KEY = 0xAB
 # Mảng mẫu cơ sở (mẫu cơ bản của AUG đo trực tiếp từ biểu đồ súng trần mới của bạn)
 # Đã được nhân tỉ lệ scale 25.21 để khớp chính xác với tổng lực leo 729px
 AUG_BASE_PATTERN = [
-    26, 27, 28, 29, 30, 32, 33, 34, 35, 36, 
-    37, 38, 39, 40, 41, 42, 42, 42, 42, 42, 
-    42, 42, 42, 42, 42, 42, 43, 43, 43, 43, 
-    43, 42, 42, 42, 42, 42, 42, 42, 42, 42
+    24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 
+    35, 36, 37, 38, 39, 40, 40, 40, 40, 40, 
+    40, 40, 40, 40, 40, 40, 41, 41, 41, 41, 
+    41, 40, 40, 40, 40, 40, 40, 40, 40, 40
 ]
 FIRE_RATE_MS = 84  # Tốc độ bắn của AUG (khoảng thời gian trễ ms giữa các phát)
 
