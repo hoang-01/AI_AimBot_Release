@@ -14,16 +14,16 @@ OBFUSCATION_KEY = 0xAB
 # Mảng mẫu cơ sở (mẫu cơ bản của AUG đo trực tiếp từ biểu đồ súng trần mới của bạn)
 # Đã được nhân tỉ lệ scale 25.21 để khớp chính xác với tổng lực leo 729px
 AUG_BASE_PATTERN = [
-    28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 
-    39, 40, 41, 42, 43, 44, 44, 44, 44, 44, 
-    44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 
-    44, 44, 44, 44, 44, 43, 43, 43, 43, 43
+    26, 27, 28, 29, 30, 32, 33, 34, 35, 36, 
+    37, 38, 39, 40, 41, 42, 42, 42, 42, 42, 
+    42, 42, 42, 42, 42, 42, 43, 43, 43, 43, 
+    43, 42, 42, 42, 42, 42, 42, 42, 42, 42
 ]
 FIRE_RATE_MS = 84  # Tốc độ bắn của AUG (khoảng thời gian trễ ms giữa các phát)
 
 # Các thông số vật lý thực tế từ cấu hình mới của bạn
 VERTICAL_RECOIL_BASE = 1.50         # Vertical Recoil cơ bản mới của AUG (1.50)
-FIRST_SHOT_MULTIPLIER = 1.00        # Đặt là 1.0 vì lực giật viên đầu đã được tích hợp sẵn vào mảng thô (63)
+FIRST_SHOT_MULTIPLIER = 1.50       
 TOTAL_CLIMB_PX = 729                # Tổng độ cao leo mới (729 px)
 
 # Hệ số bù trừ độ nhạy ngắm trong game (Tăng lên nếu ghì chưa đủ, giảm đi nếu ghì quá đà xuống đất)
@@ -32,9 +32,9 @@ SENSITIVITY_MULTIPLIER = 1
 
 # Hệ số nhân phụ kiện
 MULTIPLIER_DOWN = 0.80              # Ngồi bắn (squat = 0.80)
-MULTIPLIER_THUMB = 0.85             # Tay cầm thumb (thumb)
+MULTIPLIER_THUMB = 0.85            # Tay cầm thumb (thumb)
 MULTIPLIER_NO_SCOPE = 1.0           # Ống ngắm (no_scope = 1.0)
-MULTIPLIER_COMPENSATE = 0.784       # Đầu nòng compensator
+MULTIPLIER_COMPENSATE = 0.85      # Đầu nòng compensator
 
 # Thiết lập độ chính xác thời gian tối đa trên Windows (1ms)
 try:
