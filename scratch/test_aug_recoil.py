@@ -63,10 +63,10 @@ TOTAL_CLIMB_PX = 680                # Tổng độ cao leo mới (680 px)
 
 # Hệ số bù trừ độ nhạy ngắm trong game (Tăng lên nếu ghì chưa đủ, giảm đi nếu ghì quá đà xuống đất)
 # Mặc định thiết lập 1.20 để phù hợp với độ nhạy chuột của bạn
-SENSITIVITY_MULTIPLIER = 1.20
+SENSITIVITY_MULTIPLIER = 1
 
 # Hệ số nhân phụ kiện
-MULTIPLIER_DOWN = 0.52              # Nằm bắn (down)
+MULTIPLIER_DOWN = 0.80              # Ngồi bắn (squat = 0.80)
 MULTIPLIER_THUMB = 0.85             # Tay cầm thumb (thumb)
 MULTIPLIER_NO_SCOPE = 1.0           # Ống ngắm (no_scope)
 MULTIPLIER_COMPENSATE = 0.784       # Đầu nòng compensator
